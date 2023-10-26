@@ -4,36 +4,36 @@
 (deftemplate Usuario
     (slot dni)
     (slot pin)
-    (slot dinero)
+    (slot dinero (default 0))
 )
 
 (deftemplate Tarjeta
     (slot pin)
     (slot dni)
     (slot intentos (default 3))
-    (slot lim_dinero(default 100))
-    (slot expiracion(default 2030))
+    (slot limite(default 100))
+    (slot anno(default 2030))
     (slot validacion (allowed-values Si No)(default No))
 )
 
 (deftemplate Cuenta
     (slot dni)
     (slot saldo)
-    (slot estado (allowed-values enPantalla dineroEntregado Inicial SuperaLimite SinSaldo))
+    (slot estado (allowed-values enPantalla dineroEntregado Inicial SuperaLimite SinSaldo)(default Inicial))
 
 )
 
 (deffacts inicales
-    (Tarjeta (dni 123456)(pin 1212)(lim_dinero 500)(expiracion 2026))
-    (Tarjeta (dni 456456)(pin 4545)(lim_dinero 500)(expiracion 2026))
-    (Tarjeta (dni 000111)(pin 0011)(intentos 0)(lim_dinero 500)(expiracion 2026))
+    (Tarjeta (dni 123456)(pin 1212)(limite 500)(anno 2026))
+    (Tarjeta (dni 456456)(pin 4545)(limite 500)(anno 2026))
+    (Tarjeta (dni 000111)(pin 0011)(intentos 0)(limite 500)(anno 2026))
     (Cuenta (dni 123456)(saldo 5000))
     (Cuenta (dni 456456)(saldo 33))
     (Cuenta (dni 000111)(saldo 30000))
 )
 
 (defrule Supera_Intentos
-    (declare (salience 1))
+    (declare (salience 2))
     ?t <- (Tarjeta (intentos 0)(dni ?dni))
     (Cuenta (dni ?dni))
     ;(test (eq ?int 0))
@@ -44,6 +44,7 @@
 )
 
 (defrule Pin_Invalido
+    (declare (salience 1))
     ?u <- (Usuario (dni ?dni)(pin ?pin))
     ?t <- (Tarjeta (dni ?dni)(pin ?pin2)(intentos ?int))
     (Cuenta (dni ?dni))
@@ -56,7 +57,7 @@
 
 (defrule Valida_Tarjeta
     ?u <- (Usuario (dni ?dni)(pin ?pin))
-    ?t <- (Tarjeta (dni ?dni)(pin ?pin)(intentos ?int)(expiracion ?fecha)(validacion No))
+    ?t <- (Tarjeta (dni ?dni)(pin ?pin)(intentos ?int)(anno ?fecha)(validacion No))
     (Cuenta (dni ?dni))
     (test (< ?*FECHA* ?fecha))
     =>
@@ -65,6 +66,7 @@
 )
 
 (defrule Muestra_Saldo
+    (Usuario (dni ?dni))
     (Tarjeta (validacion Si)(dni ?dni))
     ?c <- (Cuenta (dni ?dni)(saldo ?saldo))
     =>
@@ -73,20 +75,48 @@
 )
 
 (defrule Saldo_NoSuficiente
+    ?u <- (Usuario (dni ?dni)(dinero ?dinero))
     (Tarjeta (validacion Si)(dni ?dni))
-    (Cuenta (dni ?dni)(saldo 0))
+    (Cuenta (dni ?dni)(saldo ?saldo))
+    (test (> ?dinero ?saldo))
     =>
-    (printout t "Sin saldo" crlf)
+    (printout t "Saldo Insuficiente" crlf)
+    (retract ?u)
 )
 
 (defrule Comprueba_Limite1
-
+    ?u <- (Usuario (dni ?dni)(dinero ?dinero))
+    (Tarjeta (validacion Si)(dni ?dni))
+    (test (< ?*LIMITE1* ?dinero))
+    =>
+    (printout t "El dinero supera el límite del banco" crlf)
+    (retract ?u)
 )
 
 (defrule Comprueba_Limite2
-
+    ?u <- (Usuario (dni ?dni)(dinero ?dinero))
+    (Cuenta (saldo ?saldo)(dni ?dni))
+    (Tarjeta (limite ?limite)(dni ?dni)(validacion Si))
+    (test (< ?limite ?dinero))
+    =>
+    (printout t "El dinero supera el límite de la tarjeta" crlf)
+    (retract ?u)
 )
 
 (defrule Entrega_Dinero
+    (declare (salience -1))
+    (Usuario (dni ?dni)(dinero ?dinero))
+    ?c <- (Cuenta (dni ?dni)(saldo ?saldo))
+    (Tarjeta (validacion Si))
+    =>
+    quitarDinero (?saldo ?dinero)
+    (modify ?c (estado dineroEntregado)(saldo (diferencia ?saldo ?dinero)))
+)
 
+(deffunction decremento (?a)
+    (- ?a 1)
+)
+
+(deffunction diferencia (?a ?b)
+    (- ?a ?b)
 )
