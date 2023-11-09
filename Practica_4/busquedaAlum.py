@@ -68,9 +68,8 @@ def busquedaAnchura() -> bool:
 
         actual = abiertos[0]
         abiertos.pop(0)
-        
-        objetivo = testObjetivo(actual.estado)
 
+        objetivo = testObjetivo(actual.estado)
         if not objetivo:
             sucesores = expandir(actual)
             abiertos += sucesores
