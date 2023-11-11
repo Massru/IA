@@ -61,7 +61,7 @@ def busquedaAnchura() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
-    nodosVisitados = 0
+    nodosExplorados = 0
 
     while not objetivo and len(abiertos) > 0:
 
@@ -72,12 +72,12 @@ def busquedaAnchura() -> bool:
         if not objetivo:
             sucesores = expandir(actual)
             abiertos += sucesores
-            nodosVisitados += 1
+            nodosExplorados += 1
 
 
     if objetivo:
         dispSolucion(actual)
-        print("Nodos visitados: ", nodosVisitados)
+        print("Nodos explorados: ", nodosExplorados)
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -91,7 +91,7 @@ def busquedaAnchuraControl() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
-    nodosVisitados = 0
+    nodosExplorados = 0
 
     while not objetivo and len(abiertos) > 0:
 
@@ -103,13 +103,13 @@ def busquedaAnchuraControl() -> bool:
         if not objetivo and actual.hash() not in cerrados.keys():
             sucesores = expandir(actual)
             abiertos += sucesores
-            nodosVisitados += 1
+            nodosExplorados += 1
             cerrados.update({actual.hash(): actual})
 
 
     if objetivo:
         dispSolucion(actual)
-        print("Nodos visitados: ", nodosVisitados)
+        print("Nodos explorados: ", nodosExplorados)
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -123,7 +123,7 @@ def busquedaProfundidadControl() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
-    nodosVisitados = 0
+    nodosExplorados = 0
 
     while not objetivo and len(abiertos) > 0:
 
@@ -135,12 +135,12 @@ def busquedaProfundidadControl() -> bool:
         if not objetivo and actual.hash() not in cerrados.keys():
             sucesores = expandir(actual)
             abiertos = sucesores + abiertos
-            nodosVisitados += 1
+            nodosExplorados += 1
             cerrados.update({actual.hash(): actual})
 
     if objetivo:
         dispSolucion(actual)
-        print("Nodos visitados: ", nodosVisitados)
+        print("Nodos explorados: ", nodosExplorados)
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -154,7 +154,7 @@ def busquedaProfundidadLimitada(pr) -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
-    nodosVisitados = 0
+    nodosExplorados = 0
 
     while not objetivo and len(abiertos) > 0:
 
@@ -166,13 +166,13 @@ def busquedaProfundidadLimitada(pr) -> bool:
         if not objetivo and actual.hash() not in cerrados.keys() and actual.profundidad < pr:
             sucesores = expandir(actual)
             abiertos = sucesores + abiertos
-            nodosVisitados += 1
+            nodosExplorados += 1
 
         cerrados.update({actual.hash(): actual})
 
     if objetivo:
         dispSolucion(actual)
-        print("Nodos visitados: ", nodosVisitados)
+        print("Nodos explorados: ", nodosExplorados)
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -186,7 +186,7 @@ def busquedaProfundidadLimitadaIterativa() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     pr = 0
-    nodosVisitados = 0
+    nodosExplorados = 0
 
     while not objetivo:
 
@@ -202,7 +202,7 @@ def busquedaProfundidadLimitadaIterativa() -> bool:
             if not objetivo and actual.hash() not in cerrados.keys() and actual.profundidad < pr:
                 sucesores = expandir(actual)
                 abiertos = sucesores + abiertos
-                nodosVisitados += 1
+                nodosExplorados += 1
 
             cerrados.update({actual.hash(): actual})
         
@@ -211,7 +211,7 @@ def busquedaProfundidadLimitadaIterativa() -> bool:
 
     if objetivo:
         dispSolucion(actual)
-        print("Nodos visitados: ", nodosVisitados)
+        print("Nodos explorados: ", nodosExplorados)
     elif not objetivo:
         print("No se ha encontrado solución")
 
