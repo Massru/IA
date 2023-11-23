@@ -1,0 +1,8 @@
+1. Heuristica -> Piezas mal colocadas
+2. Actualizar nodo
+3. Busqueda voraz
+    Clase fecha <
+    Lista ->
+4. Control de estados repetidos
+
+def __lt__(self, nodo)
