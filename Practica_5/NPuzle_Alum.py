@@ -23,7 +23,7 @@ class tEstado:
 
 
 def estadoInicial() -> tEstado:
-    puzle_inicial = np.array([[5, 3, 8], [0, 1, 6], [2, 4, 7]])
+    puzle_inicial = np.array([[0, 2, 3], [1, 4, 5], [8, 7, 6]])
     return tEstado(puzle_inicial)
 
 
