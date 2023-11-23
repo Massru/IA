@@ -57,7 +57,7 @@ def expandir(nodo) -> list:
     return nodos
 
 
-def busquedaAnchura() -> bool:
+def busquedaVoraz() -> bool:
     objetivo = False
     raiz = nodoInicial()
     abiertos = []
@@ -87,7 +87,7 @@ def busquedaAnchura() -> bool:
 
     return objetivo
 
-def busquedaAnchuraControl() -> bool:
+def busquedaVorazControl() -> bool:
     objetivo = False
     raiz = nodoInicial()
     abiertos = []
