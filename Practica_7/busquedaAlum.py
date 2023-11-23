@@ -16,9 +16,9 @@ class Nodo:
 
     def hash(self) -> str:
         return self.estado.crearHash()
-    
+
     def __lt__(self, nodo):
-        self.valHeuristica + self.costeCamino < nodo.valHeuristica + nodo.costeCamino
+        return self.valHeuristica + self.costeCamino < nodo.valHeuristica + nodo.costeCamino
 
 
 def nodoInicial() -> Nodo:
@@ -62,6 +62,7 @@ def busqueda() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
+    nodoExplorado = 0
 
 
     while not objetivo and len(abiertos) > 0:
@@ -74,9 +75,12 @@ def busqueda() -> bool:
             sucesores = expandir(actual)
             abiertos += sucesores
             abiertos.sort()
+            nodoExplorado += 1
 
     if objetivo:
         dispSolucion(actual)
+        print("Nodos explorados: ", nodoExplorado)
+
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -89,6 +93,7 @@ def busquedaControl() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
+    nodoExplorado = 0
 
     while not objetivo and len(abiertos) > 0:
 
@@ -101,11 +106,13 @@ def busquedaControl() -> bool:
             sucesores = expandir(actual)
             abiertos += sucesores
             abiertos.sort()
+            nodoExplorado += 1
             cerrados.update({actual.hash(): actual.valHeuristica})
 
 
     if objetivo:
         dispSolucion(actual)
+        print("Nodos explorados: ", nodoExplorado)
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -117,8 +124,8 @@ def BusquedaHeuristica(actual: tEstado) -> int:
     heu = 0
 
     for i in range(1, actual.N **2):
-        fila_obj, col_obj = np.where(estadoObjetivo().tablero == i)
-        fila, col = np.where(actual.tablero == i)
-        heu += (abs(fila-fila_obj) + abs(col-col_obj))
+        f_obj, c_obj = np.where(estadoObjetivo().tablero == i)
+        f, c = np.where(actual.tablero == i)
+        heu += (abs(f-f_obj) + abs(c-c_obj))
 
     return heu
