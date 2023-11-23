@@ -64,6 +64,8 @@ def busquedaVoraz() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
+    nodoExplorado = 0
+
 
     while not objetivo and len(abiertos) > 0:
 
@@ -75,10 +77,12 @@ def busquedaVoraz() -> bool:
             sucesores = expandir(actual)
             abiertos += sucesores
             abiertos.sort()
+            nodoExplorado += 1
 
 
     if objetivo:
         dispSolucion(actual)
+        print("Nodos explorados: ", nodoExplorado)
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -91,6 +95,7 @@ def busquedaVorazControl() -> bool:
     sucesores = []
     cerrados = {}  # Cerrados es un diccionario para que funcione como una tabla hash
     abiertos.append(raiz)
+    nodoExplorado = 0
 
     while not objetivo and len(abiertos) > 0:
 
@@ -103,11 +108,13 @@ def busquedaVorazControl() -> bool:
             sucesores = expandir(actual)
             abiertos += sucesores
             abiertos.sort()
+            nodoExplorado += 1
             cerrados.update({actual.hash(): actual.valHeuristica})
 
 
     if objetivo:
         dispSolucion(actual)
+        print("Nodos explorados: ", nodoExplorado)
     elif not objetivo:
         print("No se ha encontrado solución")
 
@@ -118,9 +125,6 @@ def Heuristica(actual: tEstado) -> int:
 
     objetivo = estadoObjetivo().tablero
 
-    if actual.tablero == objetivo:
-        heu = 0
-    else:
-        heu = ((actual.tablero != objetivo).sum() - 1)
+    heu = ((actual.tablero != objetivo).sum() - 1)
 
     return heu
