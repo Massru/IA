@@ -99,8 +99,6 @@ def aplicaJugada(actual: Nodo, jugada: Jugada, jugador: int) -> Nodo:
     nuevo.tablero[jugada.x, jugada.y] = jugador
     nuevo.vacias -= 1
 
-    #raise NotImplementedError
-
     return nuevo
 
 
@@ -126,9 +124,6 @@ def esValida(actual: Nodo, jugada: Jugada) -> bool:
 
     return valido
 
-    #raise NotImplementedError
-
-
 def terminal(actual: Nodo) -> bool:
     """Comprueba si el juego se ha acabado, ya sea porque alguno de los jugadores ha ganado o bien
     porque no sea posible realizar ningún movimiento más.
@@ -145,33 +140,26 @@ def terminal(actual: Nodo) -> bool:
     """
     acabado = False
 
-    # Comprobamos si hay alguna fila con 3 fichas iguales
-    for i in range(actual.N):
-        if actual.tablero[i, 0] == actual.tablero[i, 1] == actual.tablero[i, 2] and actual.tablero[i, 0] != 0:
-            acabado = True
-        
-    # Comprobamos si hay alguna columna con 3 fichas iguales
-    for i in range(actual.N):
-        if actual.tablero[0, i] == actual.tablero[1, i] == actual.tablero[2, i] and actual.tablero[0, i] != 0:
-            acabado = True
-        
-    # Comprobamos si hay alguna diagonal con 3 fichas iguales
-    if actual.tablero[0, 0] == actual.tablero[1, 1] == actual.tablero[2, 2] and actual.tablero[0, 0] != 0:
+    if actual.vacias == 0:
         acabado = True
-    if actual.tablero[0, 2] == actual.tablero[1, 1] == actual.tablero[2, 0] and actual.tablero[0, 2] != 0:
-        acabado = True
-    
-    # Comprobamos si hay alguna casilla vacia
-    for i in range(actual.N):
-        for j in range(actual.N):
-            if actual.tablero[i, j] == 0:
-                acabado = False
-                break
-            else:
+    else:
+        # Comprobamos si hay alguna fila con 3 fichas iguales
+        for i in range(actual.N):
+            if actual.tablero[i, 0] == actual.tablero[i, 1] == actual.tablero[i, 2] and actual.tablero[i, 0] != 0:
                 acabado = True
 
+        # Comprobamos si hay alguna columna con 3 fichas iguales
+        for i in range(actual.N):
+            if actual.tablero[0, i] == actual.tablero[1, i] == actual.tablero[2, i] and actual.tablero[0, i] != 0:
+                acabado = True
+
+        # Comprobamos si hay alguna diagonal con 3 fichas iguales
+        if actual.tablero[0, 0] == actual.tablero[1, 1] == actual.tablero[2, 2] and actual.tablero[0, 0] != 0:
+            acabado = True
+        if actual.tablero[0, 2] == actual.tablero[1, 1] == actual.tablero[2, 0] and actual.tablero[0, 2] != 0:
+            acabado = True
+
     return acabado
-    #raise NotImplementedError
 
 
 def utilidad(nodo: Nodo) -> int:
@@ -211,5 +199,3 @@ def utilidad(nodo: Nodo) -> int:
         return -100
     else:
         return 0
-    
-    #raise NotImplementedError

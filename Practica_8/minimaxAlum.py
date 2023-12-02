@@ -19,8 +19,8 @@ def jugadaAdversario(nodo):
     valida = False
     jugada = None
     while not valida:
-        fila = int(input("Fila: "))
-        col = int(input("Col: "))
+        fila = int(input("Fila: ")) - 1
+        col = int(input("Col: ")) - 1
         jugada = Jugada(fila, col)
         valida = esValida(nodo, jugada)
         if not valida:
@@ -30,12 +30,39 @@ def jugadaAdversario(nodo):
 
 
 def minimax(nodo):
-    raise NotImplementedError
+    jugador = 1
+    mejorJugada = jugadas[0]
+    max = -10000
+    for jugada in jugadas:
+        if esValida(nodo, jugada):
+            intento = aplicaJugada(nodo, jugada, jugador)
+            max_actual = valorMin(intento)
+            if max_actual > max:
+                max = max_actual
+                mejorJugada = jugada
+    nodo = aplicaJugada(nodo, mejorJugada, jugador)
+    return nodo
 
 
 def valorMin(nodo):
-    raise NotImplementedError
+    valor_min = 10000
+    jugador = -1
+    if terminal(nodo):
+        valor_min = utilidad(nodo)
+    else:
+        for jugada in jugadas:
+            if esValida(nodo, jugada):
+                valor_min = min(valor_min, valorMax(aplicaJugada(nodo, jugada, jugador)))
+    return valor_min   
 
 
 def valorMax(nodo):
-    raise NotImplementedError
+    valor_max = -10000
+    jugador = 1
+    if terminal(nodo):
+        valor_max = utilidad(nodo)
+    else:
+        for jugada in jugadas:
+            if esValida(nodo, jugada):
+                valor_max = max(valor_max, valorMin(aplicaJugada(nodo, jugada, jugador)))
+    return valor_max
