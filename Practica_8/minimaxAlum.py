@@ -45,7 +45,7 @@ def minimax(nodo):
 
 
 def valorMin(nodo):
-    valor_min = 10000
+    valor_min = np.inf
     jugador = -1
     if terminal(nodo):
         valor_min = utilidad(nodo)
@@ -57,7 +57,7 @@ def valorMin(nodo):
 
 
 def valorMax(nodo):
-    valor_max = -10000
+    valor_max = -np.inf
     jugador = 1
     if terminal(nodo):
         valor_max = utilidad(nodo)
