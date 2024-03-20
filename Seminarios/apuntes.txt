@@ -1,0 +1,10 @@
+CLP (datos)
+    deftemplate
+    deffacts
+    defrule
+BAT (todo)
+    CLP
+    assert
+    clear
+    reset
+    ...
